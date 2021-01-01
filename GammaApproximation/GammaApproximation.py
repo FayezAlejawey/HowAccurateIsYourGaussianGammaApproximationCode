@@ -7,7 +7,14 @@ def GammaAtGivenScale(m, x):
 
 def GetMaxValue(f, x, useRound):
     fPrime = diff(f, x)
-    solutions = solve(fPrime,x)
+
+    solutions = None
+    try:
+        solutions = solveset(fPrime,x)
+    except Exception as ex:
+        print(ex)
+        solutions = [0]
+
     max = float('-inf') 
     for solution in solutions:
         value = None
@@ -92,13 +99,13 @@ def CalculateCentralMoments(momentOrder, Pnks):
 def CalculateAlphaConstantValue(m, Pnks):
     thirdCentralMoment = CalculateCentralMoments(3, Pnks)
     result = (thirdCentralMoment - 2*m)/factorial(3)
-    return abs(result)
+    return result
 
 def CalculateGammaConstantValue(m, Pnks):
     thirdCentralMoment = CalculateCentralMoments(3, Pnks)
     fourthCentralMoment = CalculateCentralMoments(4, Pnks)
     result = (fourthCentralMoment - (12*thirdCentralMoment) - (3*(m**2)) + (18*m))/factorial(4)
-    return abs(result)
+    return result
 
 def PrintSecondScenarioErrorUpperBound():
     Pnks = []
@@ -107,7 +114,7 @@ def PrintSecondScenarioErrorUpperBound():
     for i in range(1,51):
         Pnks.append(10**(1.2))#12dB
 
-    thetasUpperBounds = GetThetaOneThetaTwoUpperBoundsForGammaApproximation([10], False)
+    thetasUpperBounds = GetThetaOneThetaTwoUpperBoundsForGammaApproximation([96], False)
     for thetasUpperBound in thetasUpperBounds:
         print(f"Theta1: m = {thetasUpperBound[0]}, value = {thetasUpperBound[1]}")
         print(f"Theta2: m = {thetasUpperBound[0]}, value = {thetasUpperBound[2]}")
@@ -115,14 +122,14 @@ def PrintSecondScenarioErrorUpperBound():
         print(f"Alpha Constant: m = {thetasUpperBound[0]}, value = {alphaConst}")
         gammaConst = CalculateGammaConstantValue(thetasUpperBound[0], Pnks)
         print(f"Gamma Constant: m = {thetasUpperBound[0]}, value = {gammaConst}")
-        errorUpperBound = alphaConst*thetasUpperBound[1] + gammaConst*thetasUpperBound[2]
+        errorUpperBound = abs(alphaConst*thetasUpperBound[1] + gammaConst*thetasUpperBound[2])
         print(f"Error Upper Bound: m = {thetasUpperBound[0]}, value = {errorUpperBound}")
 
 def PrintThirdScenarioErrorUpperBound():
     Pnks = [10]#10dB
     for i in range(2,101):
         Pnks.append(1)#0dB
-    thetasUpperBounds = GetThetaOneThetaTwoUpperBoundsForGammaApproximation([6], False)
+    thetasUpperBounds = GetThetaOneThetaTwoUpperBoundsForGammaApproximation([60], False)
     for thetasUpperBound in thetasUpperBounds:
         print(f"Theta1: m = {thetasUpperBound[0]}, value = {thetasUpperBound[1]}")
         print(f"Theta2: m = {thetasUpperBound[0]}, value = {thetasUpperBound[2]}")
@@ -130,15 +137,15 @@ def PrintThirdScenarioErrorUpperBound():
         print(f"Alpha Constant: m = {thetasUpperBound[0]}, value = {alphaConst}")
         gammaConst = CalculateGammaConstantValue(thetasUpperBound[0], Pnks)
         print(f"Gamma Constant: m = {thetasUpperBound[0]}, value = {gammaConst}")
-        errorUpperBound = alphaConst*thetasUpperBound[1] + gammaConst*thetasUpperBound[2]
+        errorUpperBound = abs(alphaConst*thetasUpperBound[1] + gammaConst*thetasUpperBound[2])
         print(f"Error Upper Bound: m = {thetasUpperBound[0]}, value = {errorUpperBound}")
 
-thetas = GetThetaOneThetaTwoUpperBoundsForGammaApproximation([1,2,4], True)
-for theta in thetas:
-    print(f"Theta1: m = {theta[0]}, value = {theta[1]}")
-    print(f"Theta2: m = {theta[0]}, value = {theta[2]}")
+#thetas = GetThetaOneThetaTwoUpperBoundsForGammaApproximation([1, 2, 4], True)
+#for theta in thetas:
+    #print(f"Theta1: m = {theta[0]}, value = {theta[1]}")
+    #print(f"Theta2: m = {theta[0]}, value = {theta[2]}")
 
-print("-"*25)
+#print("-"*25)
 PrintSecondScenarioErrorUpperBound()
 print("-"*25)
 PrintThirdScenarioErrorUpperBound()
