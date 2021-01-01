@@ -140,12 +140,12 @@ def PrintThirdScenarioErrorUpperBound():
         errorUpperBound = abs(alphaConst*thetasUpperBound[1] + gammaConst*thetasUpperBound[2])
         print(f"Error Upper Bound: m = {thetasUpperBound[0]}, value = {errorUpperBound}")
 
-#thetas = GetThetaOneThetaTwoUpperBoundsForGammaApproximation([1, 2, 4], True)
-#for theta in thetas:
-    #print(f"Theta1: m = {theta[0]}, value = {theta[1]}")
-    #print(f"Theta2: m = {theta[0]}, value = {theta[2]}")
+thetas = GetThetaOneThetaTwoUpperBoundsForGammaApproximation([1, 2, 4, 6, 8, 10], True)
+for theta in thetas:
+    print(f"Theta1: m = {theta[0]}, value = {theta[1]}")
+    print(f"Theta2: m = {theta[0]}, value = {theta[2]}")
 
-#print("-"*25)
+print("-"*25)
 PrintSecondScenarioErrorUpperBound()
 print("-"*25)
 PrintThirdScenarioErrorUpperBound()
